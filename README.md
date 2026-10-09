@@ -6,6 +6,18 @@ Reads the exact same usage numbers your own account already sees, renders them l
 
 Just want it in the browser instead? See [claude-limit-bar-extension](https://github.com/dmminga1983/claude-limit-bar-extension) (Chrome and Chromium-based browsers).
 
+> **Pasted this link into regular Claude chat (claude.ai) and said "install"?** That won't work from there — the regular chat can only read files you attach, it has no access to your computer's terminal. You need **Claude Code** instead (it's free to try and comes with a Claude subscription). Quick switch:
+>
+> 1. Open PowerShell and install it (skip if you already have it):
+>    ```powershell
+>    irm https://claude.ai/install.ps1 | iex
+>    ```
+>    (or, with WinGet: `winget install Anthropic.ClaudeCode`)
+> 2. Open a terminal and run `claude` to start a session.
+> 3. Paste the block from **"Install via Claude Code"** below into that session — it does the rest itself.
+>
+> Full install docs if anything above doesn't work: https://code.claude.com/docs/en/quickstart
+
 There are two display modes, **each can be turned on or off independently**:
 
 1. **System tray icon** — an icon with a bar for the remaining limit (green → yellow → red, by whichever is worse of the two windows — 5-hour and weekly), with a tooltip on hover showing percentages and time until reset.
