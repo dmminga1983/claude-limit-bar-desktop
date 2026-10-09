@@ -1,0 +1,27 @@
+# Secrets and local configs — never commit these
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+config.local.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+build/
+dist/
+*.spec
+.pytest_cache/
+install_log.txt
+diag_log.txt
+debug_log.txt
+setup_log.txt
+*_log.txt
+trace.log
+*.log
