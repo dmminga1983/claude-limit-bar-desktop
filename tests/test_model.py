@@ -12,6 +12,27 @@ def test_color_for_thresholds():
     assert model.color_for(100) == "#ff5c5c"
 
 
+def test_fill_width_zero_at_zero_percent():
+    # Раньше тут был принудительный минимум под скруглённые углы, который
+    # применялся всегда — из-за него 0% использования рисовалось видимым
+    # залитым кусочком. Теперь при used<=0 заливки нет совсем.
+    assert model.fill_width(0, bar_w=65, bar_h=12) == 0
+    assert model.fill_width(-5, bar_w=65, bar_h=12) == 0
+
+
+def test_fill_width_strictly_proportional_to_used():
+    # used=3% при bar_w=65 — это ~2px, а не искусственный минимум в bar_h=12px
+    # (который делал 3% похожими на ~18% заливки).
+    assert model.fill_width(3, bar_w=65, bar_h=12) == 2
+    assert model.fill_width(20, bar_w=65, bar_h=12) == 13
+    assert model.fill_width(50, bar_w=65, bar_h=12) == 32  # round() — банковское округление, round(32.5)=32
+
+
+def test_fill_width_clamped_to_bar_width():
+    assert model.fill_width(100, bar_w=65, bar_h=12) == 65
+    assert model.fill_width(150, bar_w=65, bar_h=12) == 65
+
+
 def test_until_reset_empty():
     assert model.until_reset(None) == ""
     assert model.until_reset("") == ""
@@ -131,22 +152,6 @@ def test_content_height_grows_with_reset_and_button():
     # Кнопка "Бесплатный сброс" относится только к недельному лимиту.
     five_hour = [{"key": "five_hour", "used": 10, "left": 90, "reset": ""}]
     assert model.content_height(five_hour, free_reset=True) == model.content_height(five_hour, free_reset=False)
-
-
-def test_fill_width_zero_used_means_no_fill_at_all():
-    # Лимит полностью доступен (0% использовано) — заливки быть не должно,
-    # даже учитывая минимальную ширину под скруглённые углы.
-    assert model.fill_width(bar_w=65, used=0, min_px=12) == 0
-
-
-def test_fill_width_tiny_nonzero_usage_still_respects_min_px():
-    # Чуть-чуть использовано (например 2%) — заливка должна быть видна
-    # хотя бы минимальной шириной, а не пропадать из-за округления вниз.
-    assert model.fill_width(bar_w=65, used=2, min_px=12) == 12
-
-
-def test_fill_width_scales_proportionally_once_above_min():
-    assert model.fill_width(bar_w=100, used=60, min_px=12) == 60
 
 
 def test_label_position_default_is_light_at_right_edge():

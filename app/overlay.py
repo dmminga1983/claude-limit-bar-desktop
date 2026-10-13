@@ -475,12 +475,14 @@ class OverlayWidget:
             label = model.LABELS[win["key"]][0]
             c.create_text(H_PAD, y + BAR_H / 2, anchor="w", text=label, fill=MUTED, font=FONT_LABEL)
             _round_rect(c, BAR_X, y, BAR_X + BAR_W, y + BAR_H, BAR_H / 2, fill=TRACK, outline="")
-            fill_w = model.fill_width(BAR_W, win["used"], BAR_H)
+            fill_w = model.fill_width(win["used"], BAR_W, BAR_H)
             color = model.color_for(win["used"])
             if fill_w > 0:
                 _round_rect(c, BAR_X, y, BAR_X + fill_w, y + BAR_H, BAR_H / 2, fill=color, outline="")
                 # лёгкий глянцевый блик на верхней половине залитой части шкалы
-                if fill_w > 2:
+                # — только когда заливка достаточно широкая, иначе на узкой
+                # полоске получится мусор из пересекающихся/вырожденных точек.
+                if fill_w >= BAR_H / 2:
                     _round_rect(
                         c, BAR_X + 1, y + 1, BAR_X + fill_w - 1, y + BAR_H * 0.5, (BAR_H / 2) - 1,
                         fill=_lighten(color, 0.35), outline="", stipple="gray50",
