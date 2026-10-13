@@ -133,6 +133,22 @@ def test_content_height_grows_with_reset_and_button():
     assert model.content_height(five_hour, free_reset=True) == model.content_height(five_hour, free_reset=False)
 
 
+def test_fill_width_zero_used_means_no_fill_at_all():
+    # Лимит полностью доступен (0% использовано) — заливки быть не должно,
+    # даже учитывая минимальную ширину под скруглённые углы.
+    assert model.fill_width(bar_w=65, used=0, min_px=12) == 0
+
+
+def test_fill_width_tiny_nonzero_usage_still_respects_min_px():
+    # Чуть-чуть использовано (например 2%) — заливка должна быть видна
+    # хотя бы минимальной шириной, а не пропадать из-за округления вниз.
+    assert model.fill_width(bar_w=65, used=2, min_px=12) == 12
+
+
+def test_fill_width_scales_proportionally_once_above_min():
+    assert model.fill_width(bar_w=100, used=60, min_px=12) == 60
+
+
 def test_label_position_default_is_light_at_right_edge():
     # Заливка далеко от правого края шкалы — подпись на обычном месте, светлая.
     right, dark = model.label_position(bar_w=100, fill_w=20, label_px_w=18)

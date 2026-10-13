@@ -475,14 +475,16 @@ class OverlayWidget:
             label = model.LABELS[win["key"]][0]
             c.create_text(H_PAD, y + BAR_H / 2, anchor="w", text=label, fill=MUTED, font=FONT_LABEL)
             _round_rect(c, BAR_X, y, BAR_X + BAR_W, y + BAR_H, BAR_H / 2, fill=TRACK, outline="")
-            fill_w = max(BAR_H, round(BAR_W * win["used"] / 100))
+            fill_w = model.fill_width(BAR_W, win["used"], BAR_H)
             color = model.color_for(win["used"])
-            _round_rect(c, BAR_X, y, BAR_X + fill_w, y + BAR_H, BAR_H / 2, fill=color, outline="")
-            # лёгкий глянцевый блик на верхней половине залитой части шкалы
-            _round_rect(
-                c, BAR_X + 1, y + 1, BAR_X + fill_w - 1, y + BAR_H * 0.5, (BAR_H / 2) - 1,
-                fill=_lighten(color, 0.35), outline="", stipple="gray50",
-            )
+            if fill_w > 0:
+                _round_rect(c, BAR_X, y, BAR_X + fill_w, y + BAR_H, BAR_H / 2, fill=color, outline="")
+                # лёгкий глянцевый блик на верхней половине залитой части шкалы
+                if fill_w > 2:
+                    _round_rect(
+                        c, BAR_X + 1, y + 1, BAR_X + fill_w - 1, y + BAR_H * 0.5, (BAR_H / 2) - 1,
+                        fill=_lighten(color, 0.35), outline="", stipple="gray50",
+                    )
 
             # Подпись процента по умолчанию прижата к правому краю (светлая —
             # там тёмная дорожка). Когда заливка подбирается близко, подпись
