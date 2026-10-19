@@ -4,6 +4,8 @@
 
 Reads the exact same usage numbers your own account already sees, renders them locally, and talks to nothing but claude.ai — no account, no server, no tracking, no telemetry. Free and open-source (MIT).
 
+[Русская версия →](README.ru.md)
+
 Just want it in the browser instead? See [claude-limit-bar-extension](https://github.com/dmminga1983/claude-limit-bar-extension) (Chrome and Chromium-based browsers).
 
 > **Pasted this link into regular Claude chat (claude.ai) and said "install"?** That won't work from there — the regular chat can only read files you attach, it has no access to your computer's terminal. You need **Claude Code** instead (it's free to try and comes with a Claude subscription). Quick switch:
